@@ -1,24 +1,20 @@
 from rest_framework import serializers
-from .models import Usuario
+from .models import Usuario, Vendedor
 
 class UsuarioSerializer(serializers.ModelSerializer):
     class Meta:
         model = Usuario
-        # Campos que queremos exponer y poder crear/editar
-        fields = ['id', 'username', 'email', 'telefono', 'password']
-        extra_kwargs = {
-            'password': {'write_only': True}  # Para que no se muestre al obtener
-        }
+        fields = ['id', 'email', 'username', 'role']
+
+class VendedorSerializer(serializers.ModelSerializer):
+    usuario = UsuarioSerializer()
+
+    class Meta:
+        model = Vendedor
+        fields = ['id', 'usuario', 'nombre_negocio', 'direccion', 'telefono']
 
     def create(self, validated_data):
-        # Aquí se ponerhash de password (Futuro ejemplo)
-        return Usuario.objects.create(**validated_data)
-
-    def update(self, instance, validated_data):
-        # Actualiza los campos del usuario y guarda
-        instance.username = validated_data.get('username', instance.username)
-        instance.email = validated_data.get('email', instance.email)
-        instance.telefono = validated_data.get('telefono', instance.telefono)
-        instance.password = validated_data.get('password', instance.password)
-        instance.save()
-        return instance
+        usuario_data = validated_data.pop('usuario')
+        usuario = Usuario.objects.create_user(**usuario_data)
+        vendedor = Vendedor.objects.create(usuario=usuario, **validated_data)
+        return vendedor

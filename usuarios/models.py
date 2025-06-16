@@ -1,12 +1,22 @@
+from django.contrib.auth.models import AbstractUser
 from django.db import models
 
-class Usuario(models.Model):
-    # Datos básicos de un usuario
-    username = models.CharField(max_length=150, unique=True)
+class Usuario(AbstractUser):
+    ROLE_CHOICES = (
+        ('cliente', 'Cliente'),
+        ('vendedor', 'Vendedor'),
+    )
     email = models.EmailField(unique=True)
-    telefono = models.CharField(max_length=20)
-    password = models.CharField(max_length=128)
+    role = models.CharField(max_length=10, choices=ROLE_CHOICES)
+
+    USERNAME_FIELD = 'email'
+    REQUIRED_FIELDS = ['username']
+
+class Vendedor(models.Model):
+    usuario = models.OneToOneField(Usuario, on_delete=models.CASCADE, related_name='vendedor')
+    nombre_negocio = models.CharField(max_length=100)
+    direccion = models.CharField(max_length=255)
+    telefono = models.CharField(max_length=15)
 
     def __str__(self):
-        # Representación legible del usuario
-        return self.username
+        return self.nombre_negocio

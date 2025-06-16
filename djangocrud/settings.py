@@ -38,16 +38,12 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'usuarios',
-    'vendedores',
     'productos',
-    'app_inventario',
-    'app_prueba',
-    'app_usuarios',
-    'app_restaurantes',
-    'app_reservas',
-    'app_productos',
     'rest_framework',
 ]
+
+AUTH_USER_MODEL = 'usuarios.Usuario'
+
 
 
 MIDDLEWARE = [

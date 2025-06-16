@@ -1,18 +1,27 @@
 from rest_framework import generics
-from .models import Usuario
-from .serializers import UsuarioSerializer
+from .models import Usuario, Vendedor
+from .serializers import UsuarioSerializer, VendedorSerializer
 
-# Listar todos los usuarios
-class UsuarioListView(generics.ListAPIView):
+class UsuarioList(generics.ListAPIView):
     queryset = Usuario.objects.all()
     serializer_class = UsuarioSerializer
 
-# Crear un nuevo usuario
-class UsuarioCreateView(generics.CreateAPIView):
+class UsuarioCreate(generics.CreateAPIView):
     queryset = Usuario.objects.all()
     serializer_class = UsuarioSerializer
 
-# Ver, actualizar o eliminar un usuario específico
-class UsuarioDetailView(generics.RetrieveUpdateDestroyAPIView):
+class UsuarioRetrieve(generics.RetrieveAPIView):
     queryset = Usuario.objects.all()
     serializer_class = UsuarioSerializer
+
+class UsuarioUpdate(generics.UpdateAPIView):
+    queryset = Usuario.objects.all()
+    serializer_class = UsuarioSerializer
+
+class UsuarioDelete(generics.DestroyAPIView):
+    queryset = Usuario.objects.all()
+    serializer_class = UsuarioSerializer
+
+class VendedorCreate(generics.CreateAPIView):
+    queryset = Vendedor.objects.all()
+    serializer_class = VendedorSerializer
